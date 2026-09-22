@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
-import { Karla, Oswald } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
+import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import type { ReactNode } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import ThemeRegistry from "@/theme/ThemeRegistry";
 import "./globals.css";
 
-const display = Oswald({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400", "500", "600", "700"],
-});
-
-const body = Karla({
+const sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-body",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -24,16 +19,16 @@ export const metadata: Metadata = {
     template: "%s · Enduro Riders",
   },
   description:
-    "Komunitas enduro Indonesia. Leaderboard, chapter, jalur, quest, dan catatan perjalanan untuk rider yang pulang bareng.",
+    "Enduro Riders, komunitas enduro. Cari chapter, lihat agenda ride, baca berita, dan daftar gabung.",
   icons: { icon: "/logo.jpg" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="id" className={`${display.variable} ${body.variable}`}>
+    <html lang="id" className={sans.variable} suppressHydrationWarning>
       <body>
+        <InitColorSchemeScript defaultMode="light" />
         <ThemeRegistry>
-          <div className="grain" />
           <div className="app-root">
             <SiteHeader />
             <main style={{ flex: 1 }}>{children}</main>

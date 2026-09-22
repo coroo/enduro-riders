@@ -1,283 +1,307 @@
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
+import TwoWheelerOutlinedIcon from "@mui/icons-material/TwoWheelerOutlined";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import AppButton from "@/components/AppButton";
-import LeaderboardPreview from "@/components/LeaderboardPreview";
-import PhoneMock from "@/components/PhoneMock";
 import Plate from "@/components/Plate";
-import SectionHeading from "@/components/SectionHeading";
-import TextLink from "@/components/TextLink";
-import { chapters, features, getLeaderboard, stats, stories, testimonials } from "@/lib/data";
-import { formatCount, formatDate, formatKm } from "@/lib/format";
-import { color } from "@/theme/tokens";
+import { chapters, events, stats, steps, stories } from "@/lib/data";
+import { formatCount, formatDate } from "@/lib/format";
+import { chapterPhoto, color, eventPhoto, photos, storyPhoto } from "@/theme/tokens";
 
-const scenes = ["route", "search", "record"] as const;
+const statIcons = ["tint-blue", "tint-red", "tint-green", "tint-orange"] as const;
+const statGlyph = [GroupsOutlinedIcon, TwoWheelerOutlinedIcon, CalendarMonthOutlinedIcon, NewspaperOutlinedIcon];
+
+const stepLinks = ["/chapter", "/agenda", "/kontak"];
+const stepIcons = [GroupsOutlinedIcon, CalendarMonthOutlinedIcon, TwoWheelerOutlinedIcon];
+
+function statusOf(status: (typeof events)[number]["status"]) {
+  if (status === "Buka") return { label: "Tersedia slot", className: "chip-open" };
+  if (status === "Penuh") return { label: "Hampir penuh", className: "chip-soon" };
+  if (status === "Daftar") return { label: "Pendaftaran dibuka", className: "chip-info" };
+  return { label: "Selesai", className: "chip-done" };
+}
+
+const nextEvent = events.find((item) => item.status !== "Selesai") ?? events[0];
 
 export default function HomePage() {
-  const board = getLeaderboard("personal");
+  const upcoming = events.filter((item) => item.status !== "Selesai");
 
   return (
-    <>
-      <Container sx={{ pt: { xs: 4, md: 6 }, pb: { xs: 2, md: 4 } }}>
+    <Box sx={{ bgcolor: "background.default" }}>
+      <Container sx={{ pt: { xs: 5, md: 7 }, pb: 2 }}>
         <Box
-          className="crest-in"
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "1.15fr 0.85fr" },
+            gridTemplateColumns: { xs: "minmax(0, 1fr)", md: "minmax(0, 1.05fr) minmax(0, 0.95fr)" },
             gap: { xs: 4, md: 6 },
             alignItems: "center",
-            minHeight: { md: "calc(100vh - 140px)" },
           }}
         >
-          <Box>
-            <Typography variant="overline" sx={{ color: color.gold }}>
-              Motorcycle Club
+          <Box sx={{ minWidth: 0 }}>
+            <Typography sx={{ color: color.gold, fontWeight: 800, fontSize: 12, letterSpacing: "0.14em" }}>
+              MOTORCYCLE CLUB
             </Typography>
-            <Typography variant="h1" sx={{ fontSize: { xs: "4.4rem", sm: "6rem", md: "7.4rem" }, mt: 1 }}>
-              <Box component="span" sx={{ display: "block", color: color.red }}>
-                Enduro
-              </Box>
-              <Box component="span" sx={{ display: "block", color: color.silver }}>
-                Riders
-              </Box>
+            <Typography variant="h1" sx={{ fontSize: { xs: "2.5rem", md: "3.6rem" }, mt: 1.5, maxWidth: 560 }}>
+            Satu Jalur.<br/>
+            Seribu Cerita.
             </Typography>
-            <Typography sx={{ mt: 3, maxWidth: 520, fontSize: 18, lineHeight: 1.7, color: color.mute }}>
-              Selamat datang. Dari sini kamu bisa lihat leaderboard, kabar chapter, jalur, dan quest.
-              Catatan kilometer hanya naik kalau grup pulang utuh.
+            <Typography color="text.secondary" sx={{ mt: 2, maxWidth: 480, fontSize: 16.5, lineHeight: 1.7 }}>
+              Cari chapter, lihat agenda ride, baca berita, dan daftar gabung bersama Enduro Riders.
             </Typography>
-            <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", mt: 4 }}>
-              <AppButton href="/download" variant="contained">
-                Download Aplikasi
+            <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", mt: 3.5 }}>
+              <AppButton href="/kontak" variant="contained" endIcon={<ArrowForwardIcon />}>
+                Gabung Chapter
               </AppButton>
-              <AppButton href="/leaderboard" variant="outlined">
-                Lihat Leaderboard
+              <AppButton href="/agenda" variant="outlined">
+                Lihat agenda
               </AppButton>
             </Box>
           </Box>
 
-          <Plate sx={{ p: { xs: 3, md: 4 }, textAlign: "center" }}>
+          <Box sx={{ position: "relative", minWidth: 0 }}>
             <Box
-              component="img"
-              src="/logo.jpg"
-              alt="Lambang Enduro Riders Motorcycle Club"
+              aria-hidden
               sx={{
-                width: "min(100%, 380px)",
-                height: "auto",
-                display: "block",
-                mx: "auto",
-                filter: "drop-shadow(0 20px 40px rgba(226,59,44,0.25))",
+                position: "absolute",
+                right: { xs: 8, md: -8 },
+                top: -18,
+                width: "62%",
+                height: "78%",
+                bgcolor: color.red,
+                borderRadius: "28px 48px 20px 70px",
+                transform: "rotate(8deg)",
               }}
             />
-            <Typography variant="overline" sx={{ color: color.gold, display: "block", mt: 1 }}>
-              Trail · Chapter · Kilometer
-            </Typography>
-          </Plate>
+            <Box
+              component="img"
+              src={photos.hero}
+              alt="Rider enduro di jalur pegunungan"
+              sx={{
+                position: "relative",
+                width: "100%",
+                height: { xs: 280, md: 380 },
+                objectFit: "cover",
+                borderRadius: "28px",
+                display: "block",
+              }}
+            />
+            <Plate
+              sx={{
+                position: { md: "absolute" },
+                left: { md: 20 },
+                right: { md: 20 },
+                bottom: { md: -28 },
+                mt: { xs: 2, md: 0 },
+                p: 1.5,
+                display: "grid",
+                gridTemplateColumns: "72px 1fr auto",
+                gap: 1.5,
+                alignItems: "center",
+              }}
+            >
+              <Box component="img" src="/logo.jpg" alt="" sx={{ width: 72, height: 64, objectFit: "cover", borderRadius: 2 }} />
+              <Box sx={{ minWidth: 0 }}>
+                <Typography sx={{ color: color.gold, fontWeight: 800, fontSize: 11, letterSpacing: "0.08em" }}>AGENDA TERDEKAT</Typography>
+                <Typography sx={{ fontWeight: 800 }} noWrap>{nextEvent.title}</Typography>
+                <Typography variant="body2" color="text.secondary" noWrap>
+                  {formatDate(nextEvent.date)} · {nextEvent.time} · {nextEvent.city}
+                </Typography>
+              </Box>
+              <AppButton href={`/agenda/${nextEvent.slug}`} sx={{ color: color.red, px: 0, display: { xs: "none", sm: "inline-flex" } }}>
+                Detail agenda
+              </AppButton>
+            </Plate>
+          </Box>
         </Box>
 
         <Box
           sx={{
-            mt: { xs: 5, md: 2 },
+            mt: { xs: 4, md: 8 },
             display: "grid",
             gridTemplateColumns: { xs: "1fr 1fr", md: "repeat(4, 1fr)" },
-            borderTop: `1px solid ${color.line}`,
-            borderBottom: `1px solid ${color.line}`,
+            gap: 2,
           }}
         >
-          {stats.map((stat) => (
-            <Box key={stat.label} sx={{ py: 3, px: { xs: 0.5, md: 2 }, borderRight: { md: `1px solid ${color.line}` } }}>
-              <Typography variant="overline" sx={{ color: color.gold }}>
-                {stat.label}
-              </Typography>
-              <Typography sx={{ fontFamily: "var(--font-display)", fontSize: { xs: 36, md: 48 }, lineHeight: 1 }}>
-                {stat.value}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {stat.hint}
-              </Typography>
-            </Box>
-          ))}
+          {stats.map((stat, index) => {
+            const Icon = statGlyph[index];
+            return (
+              <Plate key={stat.label} sx={{ p: 2, display: "flex", gap: 1.5, alignItems: "center" }}>
+                <Box className={`tint ${statIcons[index]}`}>
+                  <Icon fontSize="small" />
+                </Box>
+                <Box>
+                  <Typography variant="body2" color="text.secondary">{stat.label}</Typography>
+                  <Typography sx={{ fontWeight: 800, fontSize: 26, lineHeight: 1.1 }}>{stat.value}</Typography>
+                  <Typography variant="caption" color="text.secondary">{stat.hint}</Typography>
+                </Box>
+              </Plate>
+            );
+          })}
         </Box>
       </Container>
 
-      <Container id="baru" sx={{ py: { xs: 8, md: 12 } }}>
-        <SectionHeading
-          kicker="What's New"
-          title="Yang baru di klub"
-          text="Pencapaian dapat tanda, dan kilometer chapter bisa dibanding tanpa harus membuka chat yang sudah tenggelam."
+      <Box sx={{ position: "relative", overflow: "hidden" }}>
+        <Box
+          aria-hidden
+          sx={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.18,
+            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 280' preserveAspectRatio='none'><path fill='%2394a3b8' d='M0 200 L120 160 L240 190 L380 110 L520 170 L680 80 L820 150 L980 90 L1120 160 L1280 70 L1440 140 V280 H0 Z'/></svg>")`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center bottom",
+            backgroundSize: "100% 220px",
+            pointerEvents: "none",
+          }}
         />
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1.1fr 0.9fr" }, gap: 2 }}>
-          <Plate sx={{ p: { xs: 3, md: 4 }, minHeight: 280 }}>
-            <Typography variant="overline" sx={{ color: color.red }}>
-              Baru
-            </Typography>
-            <Typography variant="h3" sx={{ fontSize: { xs: 36, md: 48 }, my: 1 }}>
-              Achievements & Badges
-            </Typography>
-            <Typography color="text.secondary" sx={{ maxWidth: 460, mb: 3, lineHeight: 1.7 }}>
-              Setiap pencapaian punya tanda. First Mud, Night Ridge, sampai Juru Peta — terkumpul dari ride yang benar-benar terjadi.
-            </Typography>
-            <AppButton href="/achievements" endIcon={<ArrowForwardIcon />} sx={{ color: color.gold, px: 0 }}>
-              Lihat badge
-            </AppButton>
-          </Plate>
-          <Plate sx={{ p: { xs: 3, md: 4 } }}>
-            <Typography variant="overline" sx={{ color: color.red }}>
-              Baru
-            </Typography>
-            <Typography variant="h3" sx={{ fontSize: { xs: 36, md: 48 }, my: 1 }}>
-              Leaderboard
-            </Typography>
-            <Typography color="text.secondary" sx={{ mb: 3, lineHeight: 1.7 }}>
-              Bandingkan jarak pribadi atau total chapter. Posisi teratas adalah yang catatannya lengkap, bukan yang paling berisik di grup.
-            </Typography>
-            <AppButton href="/leaderboard" endIcon={<ArrowForwardIcon />} sx={{ color: color.gold, px: 0 }}>
-              Buka papan
-            </AppButton>
-          </Plate>
-        </Box>
-      </Container>
-
-      <Box id="leaderboard" sx={{ py: { xs: 4, md: 8 }, bgcolor: "rgba(0,0,0,0.25)" }}>
-        <Container>
-          <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap", alignItems: "end" }}>
-            <SectionHeading
-              kicker="Leaderboard"
-              title="Siapa yang memimpin jalur"
-              text="Angka di bawah diambil dari catatan musim ini. Pindah tab untuk melihat total chapter."
-            />
-            <AppButton href="/leaderboard" endIcon={<ArrowForwardIcon />} sx={{ mb: 5, color: color.gold }}>
-              Lihat semua
-            </AppButton>
+        <Container sx={{ position: "relative", py: { xs: 7, md: 10 } }}>
+          <Typography sx={{ color: color.red, fontWeight: 800, fontSize: 12, letterSpacing: "0.12em" }}>DI WEB INI</Typography>
+          <Typography variant="h2" sx={{ fontSize: { xs: 32, md: 44 }, mt: 1, maxWidth: 520 }}>
+            Tiga hal yang sudah bisa dipakai
+          </Typography>
+          <Typography color="text.secondary" sx={{ mt: 1, mb: 4 }}>
+            Chapter, agenda, dan kabar klub ada di satu tempat.
+          </Typography>
+          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 2 }}>
+            {steps.map((step, index) => {
+              const Icon = stepIcons[index];
+              return (
+                <Plate key={step.title} sx={{ p: 3 }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Box className={`tint ${statIcons[index]}`}>
+                      <Icon fontSize="small" />
+                    </Box>
+                    <Typography sx={{ fontWeight: 800, color: "text.secondary" }}>0{index + 1}</Typography>
+                  </Box>
+                  <Typography variant="h3" sx={{ fontSize: 22, mt: 2 }}>{step.title}</Typography>
+                  <Typography color="text.secondary" sx={{ mt: 1, minHeight: 72, lineHeight: 1.6 }}>{step.text}</Typography>
+                  <AppButton href={stepLinks[index]} endIcon={<ArrowForwardIcon />} sx={{ color: color.red, px: 0, mt: 1 }}>
+                    Pelajari lebih lanjut
+                  </AppButton>
+                </Plate>
+              );
+            })}
           </Box>
-          <LeaderboardPreview initialPersonal={board.rows} initialUpdatedAt={board.updatedAt} />
         </Container>
       </Box>
 
-      <Container id="ride" sx={{ py: { xs: 8, md: 12 } }}>
-        <SectionHeading
-          kicker="Ride Mode"
-          title="Tentukan perjalananmu"
-          text="Rencanakan rute, cari titik yang sudah diverifikasi, lalu rekam ride dari genggaman. Aplikasi mobile menyusul — alurnya sudah bisa dilihat di sini."
-        />
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 3 }}>
-          {features.map((feature, index) => (
-            <Box key={feature.id}>
-              <PhoneMock scene={scenes[index]} />
-              <Typography variant="overline" sx={{ color: color.gold, display: "block", mt: 2 }}>
-                {feature.kicker}
-              </Typography>
-              <Typography variant="h3" sx={{ fontSize: 32, my: 1 }}>
-                {feature.title}
-              </Typography>
-              <Typography color="text.secondary">{feature.text}</Typography>
-            </Box>
-          ))}
-        </Box>
-        <Plate sx={{ mt: 6, p: { xs: 3, md: 5 }, display: "grid", gridTemplateColumns: { xs: "1fr", md: "1.4fr auto" }, gap: 2, alignItems: "center" }}>
+      <Container sx={{ pb: { xs: 6, md: 8 } }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, alignItems: "end", mb: 3, flexWrap: "wrap" }}>
           <Box>
-            <Typography variant="h2" sx={{ fontSize: { xs: 40, md: 64 } }}>
-              Ride mode untuk tanah, bukan untuk tol
-            </Typography>
-            <Typography color="text.secondary" sx={{ mt: 1.5, maxWidth: 520 }}>
-              Titik kumpul, sweep, dan catatan jalur duduk di tempat yang sama supaya tidak hilang di chat.
-            </Typography>
+            <Typography sx={{ color: color.red, fontWeight: 800, fontSize: 12, letterSpacing: "0.12em" }}>AGENDA</Typography>
+            <Typography variant="h2" sx={{ fontSize: { xs: 32, md: 40 }, mt: 0.5 }}>Ride yang sudah dijadwalkan</Typography>
+            <Typography color="text.secondary">Jam, tempat, dan status slot. Konfirmasi lewat formulir gabung.</Typography>
           </Box>
-          <AppButton href="/download" variant="contained">
-            Lihat aplikasi
-          </AppButton>
-        </Plate>
+          <AppButton href="/agenda" sx={{ color: color.red }}>Semua agenda</AppButton>
+        </Box>
+        <Box sx={{ display: "grid", gap: 1.5 }}>
+          {upcoming.map((item) => {
+            const badge = statusOf(item.status);
+            const day = new Date(item.date);
+            return (
+              <Plate key={item.slug} sx={{ p: 1.5, display: "grid", gridTemplateColumns: { xs: "72px 1fr", md: "88px 92px 1fr auto auto" }, gap: 2, alignItems: "center" }}>
+                <Box sx={{ textAlign: "center" }}>
+                  <Typography sx={{ fontWeight: 800, fontSize: 28, lineHeight: 1 }}>{day.getDate()}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {day.toLocaleDateString("id-ID", { month: "short", year: "numeric" })}
+                  </Typography>
+                </Box>
+                <Box
+                  component="img"
+                  src={eventPhoto[item.slug]}
+                  alt=""
+                  sx={{ width: 92, height: 64, objectFit: "cover", borderRadius: 2, display: { xs: "none", md: "block" } }}
+                />
+                <Box sx={{ minWidth: 0 }}>
+                  <Typography sx={{ fontWeight: 800 }}>{item.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.time} · {item.city} · {item.chapter}
+                  </Typography>
+                </Box>
+                <Box className={badge.className}>{badge.label}</Box>
+                <AppButton href={`/agenda/${item.slug}`} variant="outlined" sx={{ display: { xs: "none", md: "inline-flex" } }}>
+                  Detail
+                </AppButton>
+              </Plate>
+            );
+          })}
+        </Box>
       </Container>
 
-      <Container id="chapter" sx={{ pb: { xs: 8, md: 12 } }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap", alignItems: "end" }}>
-          <SectionHeading
-            kicker="Groups"
-            title="Bergabung dengan chapter"
-            text="Temukan pengendara di kotamu. Bagi jalur, jaga jarak, dan bangun ritme ride yang sama."
-          />
-          <AppButton href="/groups" endIcon={<ArrowForwardIcon />} sx={{ mb: 5, color: color.gold }}>
-            Lihat semua groups
-          </AppButton>
+      <Container sx={{ pb: { xs: 6, md: 8 } }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "end", mb: 3 }}>
+          <Box>
+            <Typography sx={{ color: color.red, fontWeight: 800, fontSize: 12, letterSpacing: "0.12em" }}>CHAPTER</Typography>
+            <Typography variant="h2" sx={{ fontSize: { xs: 32, md: 40 }, mt: 0.5 }}>Temukan grup di kotamu</Typography>
+          </Box>
+          <AppButton href="/chapter" sx={{ color: color.red }}>Semua chapter</AppButton>
         </Box>
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 2 }}>
           {chapters.slice(0, 3).map((chapter) => (
-            <Plate key={chapter.slug} sx={{ p: 2.5 }}>
-              <Typography variant="overline" sx={{ color: color.gold }}>
-                {chapter.city}
-              </Typography>
-              <Typography variant="h3" sx={{ fontSize: 30, my: 1 }}>
-                {chapter.name}
-              </Typography>
-              <Typography color="text.secondary" sx={{ minHeight: 72 }}>
-                {chapter.blurb}
-              </Typography>
-              <Typography sx={{ mt: 2, color: color.silver }}>
-                {formatCount(chapter.members)} rider · {formatKm(chapter.km)}
-              </Typography>
+            <Plate key={chapter.slug} sx={{ overflow: "hidden" }}>
+              <Box component="img" src={chapterPhoto[chapter.slug]} alt="" sx={{ width: "100%", height: 170, objectFit: "cover", display: "block" }} />
+              <Box sx={{ p: 2.5 }}>
+                <Typography sx={{ color: color.red, fontWeight: 800, fontSize: 12, letterSpacing: "0.08em" }}>{chapter.city.toUpperCase()}</Typography>
+                <Typography variant="h3" sx={{ fontSize: 22, my: 0.5 }}>{chapter.name}</Typography>
+                <Typography color="text.secondary" sx={{ minHeight: 48 }}>{chapter.blurb}</Typography>
+                <Typography sx={{ mt: 1.5, fontWeight: 700 }}>{formatCount(chapter.members)} rider</Typography>
+              </Box>
             </Plate>
           ))}
         </Box>
       </Container>
 
-      <Box id="cerita" sx={{ py: { xs: 8, md: 12 }, borderTop: `1px solid ${color.line}`, bgcolor: "rgba(0,0,0,0.28)" }}>
-        <Container>
-          <SectionHeading
-            kicker="Komunitas"
-            title="Apa kata rider"
-            text="Bukan iklan. Ini catatan dari orang yang rutin turun dan pulang dengan grup yang sama."
-          />
-          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 2 }}>
-            {testimonials.map((item) => (
-              <Plate key={item.name} sx={{ p: 3 }}>
-                <Typography sx={{ fontFamily: "var(--font-display)", fontSize: 64, color: color.red, lineHeight: 0.7 }}>
-                  “
-                </Typography>
-                <Typography sx={{ lineHeight: 1.7, mb: 3 }}>{item.quote}</Typography>
-                <Typography sx={{ fontWeight: 700 }}>{item.name}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {item.city}
-                </Typography>
-              </Plate>
-            ))}
-          </Box>
-        </Container>
-      </Box>
-
-      <Container sx={{ py: { xs: 8, md: 10 } }}>
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1.2fr 0.8fr" }, gap: 4, alignItems: "center" }}>
+      <Container sx={{ pb: { xs: 6, md: 8 } }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "end", mb: 3 }}>
           <Box>
-            <SectionHeading
-              kicker="Mulai"
-              title="Naik bareng Enduro Riders"
-              text="Leaderboard, chapter, dan kabar klub sudah bisa dibuka dari web. Aplikasi untuk merekam ride sedang disiapkan."
-            />
-            <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
-              <AppButton href="/download" variant="contained">
-                Download Aplikasi
-              </AppButton>
-              <AppButton href="/contact" variant="outlined">
-                Hubungi chapter
-              </AppButton>
-            </Box>
+            <Typography sx={{ color: color.red, fontWeight: 800, fontSize: 12, letterSpacing: "0.12em" }}>BERITA</Typography>
+            <Typography variant="h2" sx={{ fontSize: { xs: 32, md: 40 }, mt: 0.5 }}>Kabar dari klub</Typography>
           </Box>
-          <Plate sx={{ p: 2.5 }}>
-            <Typography variant="overline" sx={{ color: color.gold }}>
-              Kabar terbaru
-            </Typography>
-            {stories.slice(0, 3).map((story) => (
-              <Box key={story.slug} sx={{ py: 1.5, borderBottom: `1px solid ${color.line}` }}>
-                <Typography variant="body2" color="text.secondary">
-                  {formatDate(story.date)} · {story.category}
-                </Typography>
-                <TextLink href={`/news/${story.slug}`} sx={{ fontWeight: 700, display: "block", "&:hover": { color: color.gold } }}>
-                  {story.title}
-                </TextLink>
+          <AppButton href="/berita" sx={{ color: color.red }}>Lihat semua kabar</AppButton>
+        </Box>
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 2 }}>
+          {stories.slice(0, 2).map((story) => (
+            <Plate key={story.slug} sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "180px 1fr" }, overflow: "hidden" }}>
+              <Box component="img" src={storyPhoto[story.slug]} alt="" sx={{ width: "100%", height: { xs: 160, sm: "100%" }, minHeight: 160, objectFit: "cover" }} />
+              <Box sx={{ p: 2.5 }}>
+                <Typography variant="body2" color="text.secondary">{formatDate(story.date)} · {story.category}</Typography>
+                <Typography variant="h3" sx={{ fontSize: 22, my: 1 }}>{story.title}</Typography>
+                <Typography color="text.secondary">{story.excerpt}</Typography>
+                <AppButton href={`/berita/${story.slug}`} sx={{ color: color.red, px: 0, mt: 1 }}>Baca selengkapnya</AppButton>
               </Box>
-            ))}
-          </Plate>
+            </Plate>
+          ))}
         </Box>
       </Container>
-    </>
+
+      <Container sx={{ pb: { xs: 8, md: 10 } }}>
+        <Box
+          className="cta-band"
+          sx={{
+            borderRadius: 4,
+            p: { xs: 3, md: 4 },
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "160px 1fr auto" },
+            gap: 3,
+            alignItems: "center",
+          }}
+        >
+          <Box component="img" src={photos.hero} alt="" sx={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 3, display: { xs: "none", md: "block" } }} />
+          <Box>
+            <Typography variant="h2" sx={{ fontSize: { xs: 28, md: 36 }, color: "#fff" }}>Siap ikut ride berikutnya?</Typography>
+            <Typography sx={{ color: "rgba(255,255,255,0.82)", mt: 0.5 }}>
+              Kirim nama, kota, dan chapter yang kamu tuju. Balasan datang lewat email.
+            </Typography>
+          </Box>
+          <AppButton href="/kontak" variant="contained" sx={{ bgcolor: "#fff", color: color.redDeep, background: "#fff" }}>
+            Isi formulir gabung
+          </AppButton>
+        </Box>
+      </Container>
+    </Box>
   );
 }

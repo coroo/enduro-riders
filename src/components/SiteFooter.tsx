@@ -2,36 +2,26 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import TextLink from "@/components/TextLink";
+import Link from "next/link";
 import { navItems } from "@/lib/nav";
 import { color } from "@/theme/tokens";
 
-const about = [
-  { href: "/#baru", label: "What's New" },
-  { href: "/#ride", label: "Ride Mode" },
-  { href: "/#cerita", label: "Apa kata komunitas" },
-];
-
 const help = [
-  { href: "/privacy", label: "Kebijakan Privasi" },
-  { href: "/contact", label: "Hubungi Kami" },
+  { href: "/kontak", label: "Gabung / hubungi" },
+  { href: "/privacy", label: "Kebijakan privasi" },
 ];
 
 function Column({ title, links }: { title: string; links: readonly { href: string; label: string }[] }) {
   return (
     <Box>
-      <Typography variant="overline" sx={{ color: color.gold, display: "block", mb: 1.5 }}>
+      <Typography sx={{ fontWeight: 800, fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", color: color.gold, mb: 1.5 }}>
         {title}
       </Typography>
       <Stack sx={{ gap: 1 }}>
         {links.map((link) => (
-          <TextLink
-            key={link.href}
-            href={link.href}
-            sx={{ color: color.mute, fontSize: 15, "&:hover": { color: color.cream } }}
-          >
+          <Link key={link.href} href={link.href} className="footer-link">
             {link.label}
-          </TextLink>
+          </Link>
         ))}
       </Stack>
     </Box>
@@ -40,32 +30,21 @@ function Column({ title, links }: { title: string; links: readonly { href: strin
 
 export default function SiteFooter() {
   return (
-    <Box component="footer" sx={{ mt: 8, borderTop: `1px solid ${color.line}`, bgcolor: "rgba(0,0,0,0.35)" }}>
+    <Box component="footer" sx={{ mt: 4, borderTop: `1px solid ${color.line}`, bgcolor: "background.paper" }}>
       <Container sx={{ py: { xs: 6, md: 8 } }}>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", sm: "1.4fr 1fr 1fr 1fr" },
-            gap: 4,
-          }}
-        >
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1.4fr 1fr 1fr" }, gap: 4 }}>
           <Box>
-            <Stack direction="row" sx={{ alignItems: "center", gap: 1.5, mb: 2 }}>
-              <Box component="img" src="/logo.jpg" alt="" sx={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover" }} />
-              <Typography variant="h4" sx={{ fontSize: 28, lineHeight: 0.9 }}>
-                Enduro
-                <br />
-                Riders
-              </Typography>
+            <Stack direction="row" sx={{ alignItems: "center", gap: 1.25, mb: 1.5 }}>
+              <Box component="img" src="/logo.jpg" alt="" sx={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover" }} />
+              <Typography sx={{ fontWeight: 800, letterSpacing: "-0.03em", fontSize: 20 }}>Enduro Riders</Typography>
             </Stack>
-            <Typography color="text.secondary" sx={{ maxWidth: 320, lineHeight: 1.6 }}>
-              Klub pengendara enduro yang menghubungkan chapter, jalur, dan catatan kilometer di seluruh Indonesia.
+            <Typography color="text.secondary" sx={{ maxWidth: 340, lineHeight: 1.7 }}>
+              Tempat rider enduro mencari chapter, membaca agenda, dan mendaftar ride.
             </Typography>
-            <Typography sx={{ mt: 2, color: color.gold }} variant="body2">
+            <Typography sx={{ mt: 2, color: color.red, fontWeight: 700 }} variant="body2">
               halo@enduroriders.id
             </Typography>
           </Box>
-          <Column title="About" links={about} />
           <Column title="Menu" links={navItems} />
           <Column title="Bantuan" links={help} />
         </Box>

@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Kebijakan Privasi" };
 const sections = [
   {
     title: "Yang dikumpulkan",
-    text: "Nama, email, kota, dan pesan yang kamu kirim lewat formulir. Saat aplikasi ride aktif nanti, catatan jalur dan kilometer ikut tersimpan atas nama akunmu.",
+    text: "Nama, email, kota, dan pesan yang kamu kirim lewat formulir gabung.",
   },
   {
     title: "Pemakaian",

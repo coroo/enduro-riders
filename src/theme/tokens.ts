@@ -1,14 +1,43 @@
 export const color = {
-  ink: "#070605",
-  coal: "#100e0c",
-  plate: "#16130f",
-  plateRaised: "#221c16",
-  red: "#e23b2c",
-  redDeep: "#8d1c14",
-  silver: "#d9d3cb",
-  gold: "#d4b36a",
-  goldDeep: "#8d7040",
-  cream: "#f6f1e8",
-  mute: "#b7aea2",
-  line: "rgba(212, 179, 106, 0.32)",
+  ink: "var(--ink)",
+  cream: "var(--bg)",
+  paper: "var(--paper)",
+  red: "var(--red)",
+  redDeep: "#b42318",
+  gold: "var(--gold)",
+  mute: "var(--mute)",
+  line: "var(--line)",
+  hero: "var(--bg)",
+};
+
+export const photos = {
+  hero: "/photos/hero.jpg",
+  forest: "/photos/forest.jpg",
+  mountain: "/photos/mountain.jpg",
+  group: "/photos/group.jpg",
+  sunset: "/photos/sunset.jpg",
+  coast: "/photos/coast.jpg",
+} as const;
+
+export const chapterPhoto: Record<string, string> = {
+  "bandung-utara": photos.forest,
+  dieng: photos.mountain,
+  "bromo-ash": photos.sunset,
+  "gunung-kidul": photos.coast,
+  lore: photos.forest,
+  "sumatera-ridge": photos.group,
+};
+
+export const eventPhoto: Record<string, string> = {
+  "open-trail-cikole": photos.forest,
+  "sunrise-bromo": photos.mountain,
+  "latihan-hujan-berastagi": photos.group,
+  "pesisir-baron": photos.coast,
+};
+
+export const storyPhoto: Record<string, string> = {
+  "briefing-musim-hujan": photos.forest,
+  "pos-sungai-lore": photos.coast,
+  "cara-gabung-chapter": photos.group,
+  "ritme-sabtu": photos.sunset,
 };

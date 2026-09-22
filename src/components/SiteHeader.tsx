@@ -17,7 +17,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { navItems } from "@/lib/nav";
-import { color } from "@/theme/tokens";
+import { color, logo } from "@/theme/tokens";
 
 function isCurrent(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
@@ -44,7 +44,7 @@ export default function SiteHeader() {
       >
         <Toolbar sx={{ gap: 1, minHeight: 72, px: { xs: 2, md: 3 } }}>
           <Box component={Link} href="/" sx={{ display: "flex", alignItems: "center", gap: 1.1, mr: { md: 2 } }}>
-            <Box component="img" src="/logo.jpg" alt="" sx={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover" }} />
+            <Box component="img" src={logo} alt="" sx={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover" }} />
             <Box sx={{ fontWeight: 800, letterSpacing: "-0.04em", fontSize: 18 }}>
               <Box component="span" sx={{ color: color.red }}>Enduro</Box> Riders
             </Box>

@@ -1,3 +1,5 @@
+import { assetPath } from "@/lib/assetPath";
+
 export const color = {
   ink: "var(--ink)",
   cream: "var(--bg)",
@@ -10,13 +12,15 @@ export const color = {
   hero: "var(--bg)",
 };
 
+export const logo = assetPath("/logo.jpg");
+
 export const photos = {
-  hero: "/photos/hero.jpg",
-  forest: "/photos/forest.jpg",
-  mountain: "/photos/mountain.jpg",
-  group: "/photos/group.jpg",
-  sunset: "/photos/sunset.jpg",
-  coast: "/photos/coast.jpg",
+  hero: assetPath("/photos/hero.jpg"),
+  forest: assetPath("/photos/forest.jpg"),
+  mountain: assetPath("/photos/mountain.jpg"),
+  group: assetPath("/photos/group.jpg"),
+  sunset: assetPath("/photos/sunset.jpg"),
+  coast: assetPath("/photos/coast.jpg"),
 } as const;
 
 export const chapterPhoto: Record<string, string> = {

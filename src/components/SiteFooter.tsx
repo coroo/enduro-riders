@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { navItems } from "@/lib/nav";
-import { color } from "@/theme/tokens";
+import { color, logo } from "@/theme/tokens";
 
 const help = [
   { href: "/kontak", label: "Gabung / hubungi" },
@@ -35,7 +35,7 @@ export default function SiteFooter() {
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1.4fr 1fr 1fr" }, gap: 4 }}>
           <Box>
             <Stack direction="row" sx={{ alignItems: "center", gap: 1.25, mb: 1.5 }}>
-              <Box component="img" src="/logo.jpg" alt="" sx={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover" }} />
+              <Box component="img" src={logo} alt="" sx={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover" }} />
               <Typography sx={{ fontWeight: 800, letterSpacing: "-0.03em", fontSize: 20 }}>Enduro Riders</Typography>
             </Stack>
             <Typography color="text.secondary" sx={{ maxWidth: 340, lineHeight: 1.7 }}>

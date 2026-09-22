@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import ThemeRegistry from "@/theme/ThemeRegistry";
+import { logo } from "@/theme/tokens";
 import "./globals.css";
 
 const sans = Plus_Jakarta_Sans({
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   },
   description:
     "Enduro Riders, komunitas enduro. Cari chapter, lihat agenda ride, baca berita, dan daftar gabung.",
-  icons: { icon: "/logo.jpg" },
+  icons: { icon: logo },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

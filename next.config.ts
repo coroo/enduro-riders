@@ -26,6 +26,9 @@ const redirects = [
 
 const nextConfig: NextConfig = {
   ...(isGithubPages ? githubPagesConfig : {}),
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGithubPages ? "/enduro-riders" : "",
+  },
   ...(!isGithubPages
     ? {
         async redirects() {

@@ -10,7 +10,7 @@ import { useMemo, useState } from "react";
 import Plate from "@/components/Plate";
 import { listChapters } from "@/lib/data";
 import { formatCount } from "@/lib/format";
-import { chapterPhoto, color } from "@/theme/tokens";
+import { chapterPhoto, color, photos } from "@/theme/tokens";
 
 const terrains = ["Semua", "Gunung", "Hutan", "Pantai", "Perkebunan"] as const;
 
@@ -52,7 +52,7 @@ export default function ChapterExplorer() {
       <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 2 }}>
         {groups.map((group) => (
           <Plate key={group.slug} sx={{ overflow: "hidden" }}>
-            <Box component="img" src={chapterPhoto[group.slug] ?? "/photos/forest.jpg"} alt="" sx={{ width: "100%", height: 150, objectFit: "cover", display: "block" }} />
+            <Box component="img" src={chapterPhoto[group.slug] ?? photos.forest} alt="" sx={{ width: "100%", height: 150, objectFit: "cover", display: "block" }} />
             <Box sx={{ p: 2.5 }}>
             <Typography sx={{ color: color.red, fontWeight: 800, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase" }}>
               {group.terrain} · {group.city}

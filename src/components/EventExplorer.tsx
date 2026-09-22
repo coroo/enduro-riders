@@ -10,8 +10,7 @@ import Plate from "@/components/Plate";
 import { listEvents } from "@/lib/data";
 import type { ClubEvent } from "@/lib/data";
 import { formatDate } from "@/lib/format";
-import { eventPhoto } from "@/theme/tokens";
-import { color } from "@/theme/tokens";
+import { color, eventPhoto, photos } from "@/theme/tokens";
 
 const filters = ["Semua", "Buka", "Penuh", "Daftar", "Selesai"] as const;
 
@@ -49,7 +48,7 @@ export default function EventExplorer() {
           const chip = statusOf(item.status);
           return (
             <Plate key={item.slug} sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "220px 1fr" }, overflow: "hidden" }}>
-              <Box component="img" src={eventPhoto[item.slug] ?? "/photos/trail.jpg"} alt="" sx={{ width: "100%", minHeight: 160, objectFit: "cover" }} />
+              <Box component="img" src={eventPhoto[item.slug] ?? photos.forest} alt="" sx={{ width: "100%", minHeight: 160, objectFit: "cover" }} />
               <Box sx={{ p: 2.5 }}>
                 <Typography sx={{ color: color.red, fontWeight: 800, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase" }}>
                   {formatDate(item.date)} · {item.chapter}

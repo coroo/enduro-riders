@@ -10,7 +10,7 @@ import AppButton from "@/components/AppButton";
 import Plate from "@/components/Plate";
 import { chapters, events, stats, steps, stories } from "@/lib/data";
 import { formatCount, formatDate } from "@/lib/format";
-import { chapterPhoto, color, eventPhoto, photos, storyPhoto } from "@/theme/tokens";
+import { chapterPhoto, color, eventPhoto, logo, photos, storyPhoto } from "@/theme/tokens";
 
 const statIcons = ["tint-blue", "tint-red", "tint-green", "tint-orange"] as const;
 const statGlyph = [GroupsOutlinedIcon, TwoWheelerOutlinedIcon, CalendarMonthOutlinedIcon, NewspaperOutlinedIcon];
@@ -103,7 +103,7 @@ export default function HomePage() {
                 alignItems: "center",
               }}
             >
-              <Box component="img" src="/logo.jpg" alt="" sx={{ width: 72, height: 64, objectFit: "cover", borderRadius: 2 }} />
+              <Box component="img" src={logo} alt="" sx={{ width: 72, height: 64, objectFit: "cover", borderRadius: 2 }} />
               <Box sx={{ minWidth: 0 }}>
                 <Typography sx={{ color: color.gold, fontWeight: 800, fontSize: 11, letterSpacing: "0.08em" }}>AGENDA TERDEKAT</Typography>
                 <Typography sx={{ fontWeight: 800 }} noWrap>{nextEvent.title}</Typography>

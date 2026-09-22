@@ -1,5 +1,11 @@
-import { getStory } from "@/lib/data";
+import { getStory, stories } from "@/lib/data";
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-static";
+
+export function generateStaticParams() {
+  return stories.map((story) => ({ slug: story.slug }));
+}
 
 export async function GET(
   _request: Request,

@@ -1,6 +1,8 @@
 import { addMessage, inboxCount } from "@/lib/messages";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-static";
+
 type ContactBody = {
   name?: string;
   email?: string;

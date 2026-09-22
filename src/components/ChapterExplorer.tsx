@@ -1,15 +1,14 @@
 "use client";
 
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import Plate from "@/components/Plate";
-import type { Chapter } from "@/lib/data";
+import { listChapters } from "@/lib/data";
 import { formatCount } from "@/lib/format";
 import { chapterPhoto, color } from "@/theme/tokens";
 
@@ -18,35 +17,10 @@ const terrains = ["Semua", "Gunung", "Hutan", "Pantai", "Perkebunan"] as const;
 export default function ChapterExplorer() {
   const [query, setQuery] = useState("");
   const [terrain, setTerrain] = useState<(typeof terrains)[number]>("Semua");
-  const [groups, setGroups] = useState<Chapter[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => {
-      const params = new URLSearchParams();
-      if (query.trim()) params.set("q", query.trim());
-      if (terrain !== "Semua") params.set("terrain", terrain);
-      fetch(`/api/chapters?${params.toString()}`, { signal: controller.signal })
-        .then(async (response) => {
-          if (!response.ok) throw new Error("fail");
-          return (await response.json()) as { groups: Chapter[] };
-        })
-        .then((data) => {
-          setGroups(data.groups);
-          setError("");
-        })
-        .catch((reason: unknown) => {
-          if (reason instanceof DOMException && reason.name === "AbortError") return;
-          setError("Daftar chapter gagal dimuat.");
-        })
-        .finally(() => setLoading(false));
-    }, 160);
-    return () => {
-      controller.abort();
-      window.clearTimeout(timer);
-    };
+  const groups = useMemo(() => {
+    const terrainFilter = terrain === "Semua" ? undefined : terrain;
+    return listChapters(query, terrainFilter);
   }, [query, terrain]);
 
   return (
@@ -54,15 +28,11 @@ export default function ChapterExplorer() {
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
         <TextField
           value={query}
-          onChange={(event) => {
-            setQuery(event.target.value);
-            setLoading(true);
-          }}
+          onChange={(event) => setQuery(event.target.value)}
           placeholder="Cari kota atau chapter"
           size="small"
           sx={{ minWidth: 240, flex: 1, bgcolor: "#fff" }}
         />
-        {loading ? <CircularProgress size={22} sx={{ color: color.red }} /> : null}
       </Box>
       <ToggleButtonGroup
         exclusive
@@ -70,7 +40,6 @@ export default function ChapterExplorer() {
         onChange={(_event, value: (typeof terrains)[number] | null) => {
           if (!value) return;
           setTerrain(value);
-          setLoading(true);
         }}
         sx={{ flexWrap: "wrap" }}
       >
@@ -80,7 +49,6 @@ export default function ChapterExplorer() {
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
-      {error ? <Typography color="error">{error}</Typography> : null}
       <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 2 }}>
         {groups.map((group) => (
           <Plate key={group.slug} sx={{ overflow: "hidden" }}>
@@ -102,7 +70,7 @@ export default function ChapterExplorer() {
           </Plate>
         ))}
       </Box>
-      {!loading && groups.length === 0 ? (
+      {groups.length === 0 ? (
         <Typography color="text.secondary">Tidak ada chapter yang cocok.</Typography>
       ) : null}
     </Box>

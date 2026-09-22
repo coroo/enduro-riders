@@ -10,6 +10,8 @@ import Plate from "@/components/Plate";
 
 const empty = { name: "", email: "", city: "", chapter: "", message: "", company: "" };
 
+const isStaticGithubPages = process.env.NEXT_PUBLIC_GITHUB_PAGES === "true";
+
 export default function ContactForm({ chapters }: { chapters: string[] }) {
   const [form, setForm] = useState(empty);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -21,6 +23,13 @@ export default function ContactForm({ chapters }: { chapters: string[] }) {
 
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (isStaticGithubPages) {
+      setStatus("error");
+      setNotice(
+        "Formulir online belum aktif di preview GitHub Pages. Hubungi chapter lewat email atau WhatsApp di halaman tentang.",
+      );
+      return;
+    }
     setStatus("loading");
     setNotice("");
     try {

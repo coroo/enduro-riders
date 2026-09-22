@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-static";
+
 const endpoints = [
   { method: "GET", path: "/api/stats", detail: "Angka chapter, rider, dan agenda" },
   { method: "GET", path: "/api/chapters?q=&terrain=", detail: "Daftar chapter" },

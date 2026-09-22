@@ -43,7 +43,7 @@ export default function SiteHeader() {
         }}
       >
         <Toolbar sx={{ gap: 1, minHeight: 72, px: { xs: 2, md: 3 } }}>
-          <Box component={Link} href="/" sx={{ display: "flex", alignItems: "center", gap: 1.1, mr: { md: 2 } }}>
+          <Box component={Link} href="/" sx={{ display: "flex", alignItems: "center", gap: 1.1, mr: { md: 2 }, flexShrink: 0 }}>
             <Box component="img" src={logo} alt="" sx={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover" }} />
             <Box sx={{ fontWeight: 800, letterSpacing: "-0.04em", fontSize: 18 }}>
               <Box component="span" sx={{ color: color.red }}>Enduro</Box> Riders
@@ -53,7 +53,13 @@ export default function SiteHeader() {
           <Stack
             component="nav"
             direction="row"
-            sx={{ display: { xs: "none", md: "flex" }, gap: 0.25, alignItems: "center", mx: "auto" }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              gap: 0.25,
+              alignItems: "center",
+              flex: 1,
+              justifyContent: "center",
+            }}
           >
             {navItems.map((item) => {
               const active = isCurrent(pathname, item.href);
@@ -78,22 +84,32 @@ export default function SiteHeader() {
             })}
           </Stack>
 
-          <IconButton component={Link} href="/chapter" aria-label="Cari chapter" sx={{ color: "text.primary" }}>
-            <SearchIcon />
-          </IconButton>
-          <IconButton
-            aria-label={dark ? "Ganti ke mode terang" : "Ganti ke mode gelap"}
-            onClick={() => setMode(dark ? "light" : "dark")}
-            sx={{ color: "text.primary" }}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.25,
+              ml: { xs: "auto", md: 0 },
+              flexShrink: 0,
+            }}
           >
-            {dark ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
-          </IconButton>
-          <Button component={Link} href="/kontak" variant="contained" sx={{ display: { xs: "none", sm: "inline-flex" }, ml: 0.5 }}>
-            Gabung
-          </Button>
-          <IconButton aria-label="Buka menu" onClick={() => setOpen(true)} sx={{ display: { md: "none" }, color: "text.primary" }}>
-            <MenuIcon />
-          </IconButton>
+            <IconButton component={Link} href="/chapter" aria-label="Cari chapter" sx={{ color: "text.primary" }}>
+              <SearchIcon />
+            </IconButton>
+            <IconButton
+              aria-label={dark ? "Ganti ke mode terang" : "Ganti ke mode gelap"}
+              onClick={() => setMode(dark ? "light" : "dark")}
+              sx={{ color: "text.primary" }}
+            >
+              {dark ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
+            </IconButton>
+            <Button component={Link} href="/kontak" variant="contained" sx={{ display: { xs: "none", sm: "inline-flex" }, ml: 0.5 }}>
+              Gabung
+            </Button>
+            <IconButton aria-label="Buka menu" onClick={() => setOpen(true)} sx={{ display: { md: "none" }, color: "text.primary" }}>
+              <MenuIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 

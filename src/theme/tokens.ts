@@ -15,7 +15,7 @@ export const color = {
 export const logo = assetPath("/logo.jpg");
 
 export const photos = {
-  hero: assetPath("/photos/hero.jpg"),
+  hero: assetPath("/photos/hero2.png"),
   forest: assetPath("/photos/forest.jpg"),
   mountain: assetPath("/photos/mountain.jpg"),
   group: assetPath("/photos/group.jpg"),
